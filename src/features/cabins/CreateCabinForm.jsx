@@ -8,7 +8,7 @@ import FormRow from "../../ui/FormRow";
 import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
-function CreateCabinForm({ initialData = {} }) {
+function CreateCabinForm({ initialData = {}, onCloseModal }) {
   const { id: initialCabinId, ...editValues } = initialData;
   const isEditSession = !!initialCabinId;
   const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -29,6 +29,7 @@ function CreateCabinForm({ initialData = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -38,12 +39,16 @@ function CreateCabinForm({ initialData = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
   }
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -93,7 +98,7 @@ function CreateCabinForm({ initialData = {} }) {
             required: "This field is required",
             validate: (value) => {
               const regularPrice = getValues("regularPrice");
-              if (value >= regularPrice)
+              if (value > regularPrice)
                 return "Discount must be less than the regular price";
               return true;
             },
@@ -126,7 +131,12 @@ function CreateCabinForm({ initialData = {} }) {
       </FormRow>
 
       <FormRow>
-        <Button variation="secondary" type="reset" disabled={isWorking}>
+        <Button
+          variation="secondary"
+          type="reset"
+          disabled={isWorking}
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>

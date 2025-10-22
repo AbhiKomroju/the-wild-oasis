@@ -3,12 +3,40 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
 import FormRowVertical from "../../ui/FormRowVertical";
+import { useLogin } from "./useLogin";
+import SpinnerMini from "../../ui/SpinnerMini";
 
+/**
+ * Login form component for user authentication
+ * Handles email/password login with form validation
+ */
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("abhikomroju@example.com");
+  const [password, setPassword] = useState("pass1234");
+  const { login, isPending } = useLogin();
 
-  function handleSubmit() {}
+  /**
+   * Handles form submission for user login
+   * Prevents default form behavior and validates inputs before submission
+   * @param {Event} e - Form submit event
+   */
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    // Basic validation - ensure both fields are filled
+    if (!email || !password) return;
+
+    login(
+      { email, password },
+      {
+        // Clear form fields after login attempt completes (success or error)
+        onSettled: () => {
+          setEmail("");
+          setPassword("");
+        },
+      }
+    );
+  }
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -32,7 +60,9 @@ function LoginForm() {
         />
       </FormRowVertical>
       <FormRowVertical>
-        <Button size="large">Login</Button>
+        <Button size="large" disabled={isPending}>
+          {isPending ? <SpinnerMini /> : "Login"}
+        </Button>
       </FormRowVertical>
     </Form>
   );

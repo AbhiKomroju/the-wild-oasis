@@ -209,7 +209,7 @@ Multi-level approach for robust error management:
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/the-wild-oasis.git
+git clone https://github.com/AbhiKomroju/the-wild-oasis
 cd the-wild-oasis
 
 # Install dependencies

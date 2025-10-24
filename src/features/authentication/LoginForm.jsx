@@ -11,8 +11,8 @@ import SpinnerMini from "../../ui/SpinnerMini";
  * Handles email/password login with form validation
  */
 function LoginForm() {
-  const [email, setEmail] = useState("abhikomroju@example.com");
-  const [password, setPassword] = useState("pass1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { login, isPending } = useLogin();
 
   /**
